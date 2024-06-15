@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENERO</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"] {
+            width: 95%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notas de Medicamentos, Rutinas y Observaciones</h1>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+                <th>Domingo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Semana 1</td>
+                <td><input type="text" name="lunes_meds"></td>
+                <td><input type="text" name="martes_meds"></td>
+                <td><input type="text" name="miercoles_meds"></td>
+                <td><input type="text" name="jueves_meds"></td>
+                <td><input type="text" name="viernes_meds"></td>
+                <td><input type="text" name="sabado_meds"></td>
+                <td><input type="text" name="domingo_meds"></td>
+            </tr>
+            <tr>
+                <td>Semana 2</td>
+                <td><input type="text" name="lunes_rutinas"></td>
+                <td><input type="text" name="martes_rutinas"></td>
+                <td><input type="text" name="miercoles_rutinas"></td>
+                <td><input type="text" name="jueves_rutinas"></td>
+                <td><input type="text" name="viernes_rutinas"></td>
+                <td><input type="text" name="sabado_rutinas"></td>
+                <td><input type="text" name="domingo_rutinas"></td>
+            </tr>
+            <tr>
+                <td>Semana 3</td>
+                <td><input type="text" name="lunes_observaciones"></td>
+                <td><input type="text" name="martes_observaciones"></td>
+                <td><input type="text" name="miercoles_observaciones"></td>
+                <td><input type="text" name="jueves_observaciones"></td>
+                <td><input type="text" name="viernes_observaciones"></td>
+                <td><input type="text" name="sabado_observaciones"></td>
+                <td><input type="text" name="domingo_observaciones"></td>
+            </tr>
+            <tr>
+                <td>Semana 4</td>
+                <td><input type="text" name="lunes_meds"></td>
+                <td><input type="text" name="martes_meds"></td>
+                <td><input type="text" name="miercoles_meds"></td>
+                <td><input type="text" name="jueves_meds"></td>
+                <td><input type="text" name="viernes_meds"></td>
+                <td><input type="text" name="sabado_meds"></td>
+                <td><input type="text" name="domingo_meds"></td>
+            </tr>
+            <tr>
+                <td>Semana 5</td>
+                <td><input type="text" name="lunes_rutinas"></td>
+                <td><input type="text" name="martes_rutinas"></td>
+                <td><input type="text" name="miercoles_rutinas"></td>
+                <td><input type="text" name="jueves_rutinas"></td>
+                <td><input type="text" name="viernes_rutinas"></td>
+                <td><input type="text" name="sabado_rutinas"></td>
+                <td><input type="text" name="domingo_rutinas"></td>
+            </tr>
+            <tr>
+                <td>Semana 6</td>
+                <td><input type="text" name="lunes_observaciones"></td>
+                <td><input type="text" name="martes_observaciones"></td>
+                <td><input type="text" name="miercoles_observaciones"></td>
+                <td><input type="text" name="jueves_observaciones"></td>
+                <td><input type="text" name="viernes_observaciones"></td>
+                <td><input type="text" name="sabado_observaciones"></td>
+                <td><input type="text" name="domingo_observaciones"></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <button onclick="guardarInformacion()">Guardar</button>
+    <button onclick="borrarInformacion()">Borrar todo</button>
+
+    <script>
+        function guardarInformacion() {
+            let notas = {};
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                notas[input.name] = input.value;
+            });
+            localStorage.setItem('notas', JSON.stringify(notas));
+            alert('Información guardada');
+        }
+
+        function borrarInformacion() {
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            localStorage.removeItem('notas');
+            alert('Toda la información ha sido borrada');
+        }
+
+        function cargarInformacion() {
+            let notas = JSON.parse(localStorage.getItem('notas'));
+            if (notas) {
+                document.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.value = notas[input.name] || '';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarInformacion);
+        function mostrarInformacion() {
+            let notas = JSON.parse(localStorage.getItem('notas'));
+            if (notas) {
+                let info = '';
+                for (let [key, value] of Object.entries(notas)) {
+                    info += `${key.replace(/_/g, ' ')}: ${value}\n`;
+                }
+                alert(info);
+            } else {
+                alert('No hay información guardada');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarInformacion);
+    </script>
+
+</body>
+</html>
