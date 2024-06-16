@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Notas Médicas</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], input[type="number"] {
+            width: 90%;
+            padding: 5px;
+        }
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .new-note-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none; /* Ocultar el modal por defecto */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="calendar-nav">
+        <form method="GET" action="{{ url_for('index') }}">
+            <label for="mes">Mes:</label>
+            <select name="mes" id="mes">
+                {% for m in range(1, 13) %}
+                    <option value="{{ m }}" {% if m == mes %}selected{% endif %}>{{ calendario.month_name[m] }}</option>
+                {% endfor %}
+            </select>
+            <label for="año">Año:</label>
+            <input type="number" name="año" id="año" value="{{ año }}" min="2000" max="2100">
+            <button type="submit">Ver</button>
+        </form>
+        <a href="#" class="new-note-button">Nueva Nota</a>
+    </div>
+
+<h1>Notas de Medicamentos, Rutinas y Observaciones</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Semana</th>
+            {% for dia in calendario['day_name'] %}
+                <th>{{ dia }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for idx, semana in enumerate(calendario['calendario_dias'], start=1) %}
+        <tr>
+            <td>Semana {{ idx }}</td>
+            {% for dia in semana %}
+                <td>
+                    {% if dia %}
+                        {{ calendario['month_name'][mes] }}
+                        {% if dia in notas_dict %}
+                            <p>{{ notas_dict[dia][2] }}</p>
+                            <a href="{{ url_for('update_note', id=notas_dict[dia][0]) }}">Editar</a>
+                            <a href="{{ url_for('delete_note', id=notas_dict[dia][0]) }}">Eliminar</a>
+                        {% else %}
+                            <p>No hay notas</p>
+                            <button class="agregar-nota" data-dia="{{ dia }}">Agregar Nota</button>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal para agregar nueva nota -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agregar Nueva Nota</h2>
+        <form method="POST" action="{{ url_for('add_note') }}">
+            <input type="hidden" id="modalAnio" name="anio" value="">
+            <input type="hidden" id="modalMes" name="mes" value="">
+            <input type="hidden" id="modalSemana" name="semana" value="">
+            <input type="hidden" id="modalDia" name="dia" value="">
+            <label for="nota">Nota:</label>
+            <input type="text" name="nota" required>
+            <button type="submit">Agregar Nota</button>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts JavaScript -->
+<script>
+    // Obtener el modal
+    var modal = document.getElementById("myModal");
+
+    // Obtener los botones de "Agregar Nota"
+    var btns = document.querySelectorAll(".agregar-nota");
+
+    // Asignar evento click a cada botón
+    btns.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            var dia = btn.getAttribute("data-dia");
+            document.getElementById("modalDia").value = dia;
+            modal.style.display = "block";
+        });
+    });
+
+    // Obtener el elemento de cierre (la "x") dentro del modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Función para cerrar el modal al hacer clic en la "x"
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Función para cerrar el modal al hacer clic fuera de él
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

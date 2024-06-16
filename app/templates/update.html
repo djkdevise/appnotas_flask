@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Nota</title>
+</head>
+<body>
+    <h1>Actualizar Nota</h1>
+    <form method="POST" action="{{ url_for('update_note', id=note[0]) }}">
+        <label for="semana">Semana:</label>
+        <input type="number" name="semana" value="{{ note[2] }}" required>
+        <label for="dia">Día:</label>
+        <input type="text" name="dia" value="{{ note[1] }}" required>
+        <label for="nota">Nota:</label>
+        <input type="text" name="nota" value="{{ note[3] }}" required>
+        <button type="submit">Actualizar Nota</button>
+    </form>
+</body>
+</html>

@@ -104,3 +104,13 @@ Accede a la aplicación en tu navegador en `http://localhost:5000`.
 Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más información.
 
 ---
+
+## Instalar dependencias del proyecto consola cmd
+  ```sh
+   pip install -r requirements.txt
+```
+
+##  Ejecuta este script para inicializar la base de datos:
+  ```sh
+   python scripts/init_db.py
+```
